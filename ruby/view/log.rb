@@ -8,9 +8,9 @@ require 'logrenderer'
 class LogLine
   attr_accessor :time, :place, :nick, :body
   attr_accessor :line_type, :member_type
-  attr_accessor :nick_info, :click_info, :identified, :nick_color_number
+  attr_accessor :nick_info, :click_info, :identified, :nick_color_number, :address
 
-  def initialize(time, place, nick, body, line_type=:system, member_type=:normal, nick_info=nil, click_info=nil, identified=nil, nick_color_number=nil)
+  def initialize(time, place, nick, body, line_type=:system, member_type=:normal, nick_info=nil, click_info=nil, identified=nil, nick_color_number=nil, address=nil)
     @time = time
     @place = place
     @nick = nick
@@ -21,6 +21,7 @@ class LogLine
     @click_info = click_info
     @identified = identified
     @nick_color_number = nick_color_number
+    @address = address
   end
 end
 
@@ -137,6 +138,7 @@ class LogController < NSObject
     s << %|<span class="place">#{h(line.place)}</span>| if line.place
     if line.nick
       s << %|<span class="sender" type="#{line.member_type}"|
+      s << %| address="#{line.address}"| if line.address != "unknown"
       s << %| oncontextmenu="on_nick_contextmenu()"| unless @console
       s << %| identified="#{!!line.identified}"|
       s << %| colornumber="#{line.nick_color_number}"| if line.member_type == :normal
@@ -161,6 +163,7 @@ class LogController < NSObject
     attrs['type'] = line.line_type.to_s
     attrs['highlight'] = "#{!!key}"
     attrs['nick'] = line.nick_info if line.nick_info
+    attrs['address'] = line.address if line.address != "unknown"
     if @console
       if line.click_info
         attrs['clickinfo'] = line.click_info

@@ -1175,14 +1175,16 @@ class IRCUnit < NSObject
     end
     
     color_num = 0
+    address="unknown"
     if nick && channel && !channel.unit?
       m = channel.find_member(nick)
       if m
         color_num = m.color_number
+        address = m.address
       end
     end
     
-    line = LogLine.new(time, place, nickstr, text, kind, mtype, nick, click, identified, color_num)
+    line = LogLine.new(time, place, nickstr, text, kind, mtype, nick, click, identified, color_num, address)
     @world.console.print(line, self)
   end
   
@@ -1222,14 +1224,16 @@ class IRCUnit < NSObject
     click = nil
     
     color_num = 0
+    address="unknown"
     if nick && channel && !channel.unit?
       m = channel.find_member(nick)
       if m
         color_num = m.color_number
+        address = m.address
       end
     end
     
-    line = LogLine.new(time, place, nickstr, text, kind, mtype, nick, click, identified, color_num)
+    line = LogLine.new(time, place, nickstr, text, kind, mtype, nick, click, identified, color_num, address)
     if channel && !channel.unit?
       key = channel.print(line)
     else
